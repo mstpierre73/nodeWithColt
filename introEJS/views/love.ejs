@@ -1,2 +1,8 @@
-<h1>You fell in love with: <%= puppies %></h1>
-<p>This is the love.ejs file</p>
+<h1>You fell in love with: <%= puppies %></h1> 
+<% if(puppies.toLowerCase() === "rusty"){ %>
+	<p>Good choice! Rusty is the Best</p>
+<% } else { %>
+<p>Who knows what you will love next!</p>
+<% } %>
+
+<p>But I know that you love dogs!</p>
