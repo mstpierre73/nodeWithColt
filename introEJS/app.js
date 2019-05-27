@@ -1,0 +1,20 @@
+//Calling for express and defining the app
+const express = require("express");
+const app = express();
+const port = 3000;
+
+//Defining route for home page
+app.get("/", (req, res) => {
+	res.render("index.ejs");
+});
+
+//Defining a dynamic route and passing objet to add dynamic content
+app.get("/love/:puppies", (req, res) => {
+	let puppies = req.params.puppies;
+	res.render("love.ejs", {puppies: puppies});
+});
+
+//Starting the server on port 3000
+app.listen(port, function(){
+	console.log("The app is running on port 3000");
+});
