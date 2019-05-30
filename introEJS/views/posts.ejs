@@ -1,3 +1,4 @@
+<% include partials/header %>
 <h1>The Posts Page</h1>
 
 <% posts.forEach(function(element){ %>
@@ -5,4 +6,9 @@
 	<%= element.title %> - <strong><%= element.author %></strong>
 </li>
 <% }); %>
+
+<a href="/">Click here to see a beautifull puppy!</a><br>
+<a href="love/rusty">click here to fall in love!</a>
+
+<% include partials/footer %>
 
