@@ -4,8 +4,19 @@
   "description": "Demo to learn Post Requests",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
-  "author": "Marise St-Pierre",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mstpierre73/nodeWithColt.git"
+  },
+  "author": "Marise St-Pierre (http://www.marisestpierre.com)",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.1",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1"
+  }
 }

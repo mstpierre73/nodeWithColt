@@ -1,0 +1,16 @@
+<link rel="stylesheet" type="text/css" href="/app.css">
+
+<h1>Friends List Goes Here!</h1>
+
+<a href="/">Home</a>
+
+<% friends.forEach(function(friend){ %>
+	<li>I have a friend, named : <%= friend %> !</li>
+<% }); %>
+
+<h2>Let's add new friends to this list!</h2>
+
+<form action="/addFriends" method="POST">
+	<input type="text" placeholder="name" name="newfriend">
+	<button type=submit>I made a new friend !</button>
+</form>
