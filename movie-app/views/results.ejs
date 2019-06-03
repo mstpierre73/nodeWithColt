@@ -1,0 +1,17 @@
+<h1>Results of your movies search</h1>
+
+<a href="/">Search again</a>
+</br>
+
+<% movieData.Search.forEach(function(movie){ %>
+	</br>
+	<ul>
+		<li>
+			<strong>Title :</strong> <%= movie.Title %> 
+			<strong>Year :</strong> <%= movie.Year %>
+		</li>
+	</ul>	
+	</br>
+	<img src="<%= movie.Poster %>" />
+	</br>
+<% }); %>
