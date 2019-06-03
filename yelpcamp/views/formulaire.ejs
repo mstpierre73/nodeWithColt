@@ -1,0 +1,11 @@
+<% include partials/header %>
+
+<h1>Formulaire pour ajouter un nouveau terrain de camping</h1>
+
+<form action="/campings" method="POST">
+	<input type="text" placeholder="nom du camping" name="newCamp" />
+	<input type="text" placeholder="url de l'image" name="imgURL" />
+	<button>Soumettre</button> 
+</form>
+
+<% include partials/footer %>
