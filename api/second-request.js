@@ -1,17 +1,15 @@
-const request = require("request");
+const rp = require('request-promise');
 
-request("https://jsonplaceholder.typicode.com/users/1", (error, response, body) => {
-	if(!error && response.statusCode === 200){
-		const parsedData = JSON.parse(body);
-		//console.log(parsedData);
+rp('https://jsonplaceholder.typicode.com/users/2')
+	.then((htmlstring) => {
+		const parsedData = JSON.parse(htmlstring);
 		const id = parsedData.id;
 		const name = parsedData.name;
 		const username = parsedData.username;
 		const city = parsedData.address.city;
 		const street = parsedData.address.street;
 		console.log(`The user ${id} is ${name}, has username of ${username} and live in ${city} on the ${street} street`);
-	}
-});		
-		
-		
-		
+	})
+	.catch((err) =>{
+		console.log('Error = ', err);
+	});
