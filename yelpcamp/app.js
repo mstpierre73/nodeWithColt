@@ -41,7 +41,7 @@ app.post("/campings", (req, res) => {
 
 //Define add new campground route
 app.get("/campings/formulaire", (req, res) => {
-	res.render("formulaire.ejs");
+	res.render("formulaire");
 });
 
 //Define port for server
