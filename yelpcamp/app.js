@@ -18,66 +18,71 @@ mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true});
 //db schema setup
 const campgroundSchema = new mongoose.Schema({
 	name: String,
-	image: String
+	image: String,
+	description: String
 });
 
 const Campground = mongoose.model("Campground", campgroundSchema);
 
-/*Campground.create({
-	name: "Réserve faunique de Port-Daniel",
-	image: "https://www.quebecoriginal.com/fiche/images/800x600/9c2d51c1-d5bc-47b6-9fdc-cde1157b5dcd/reserve-faunique-de-port-daniel-chalet-lac-de-lile.jpg"
-}, function (err, campground){
-	if(err){
-		console.log(err);
-	} else {
-		console.log("new campground added to db");
-		console.log(campground);
-	}
-});*/
-
 
 //Define home page route
 app.get("/", (req, res) => {
-	res.render("index");
+	res.render("home");
 });
 
-//Define get campings route and get all campground from db
-app.get("/campings", (req, res) => {
-	Campground.find({}, function(err, allCamps){
+
+//Define GET campings route 
+//INDEX - Show all campgrounds from DB
+app.get("/index", (req, res) => {
+	Campground.find({}, (err, allCamps) => {
 		if(err){
 			console.log("Houston, we've got a problem!");
-			console.log("Error : " + err);
+			console.log("Get index Error : " + err);
 		} else {
-			res.render("campings", {campgrounds: allCamps});
+			res.render("index", {campgrounds: allCamps});
 		}
 	});
 });
 
 
-//Define post campings route and add new campground to db
-app.post("/campings", (req, res) => {
+//Define POST campings route 
+//CREATE - add new campground to DB
+app.post("/index", (req, res) => {
 	let newCamp = req.body.newCamp;
 	let imgURL = req.body.imgURL;
-	let newCampObj = {name: newCamp, image: imgURL};
-	Campground.create(newCampObj, function(err, newCamp){
+	let description = req.body.description;
+	let newCampObj = {name: newCamp, image: imgURL, description: description};
+	Campground.create(newCampObj, (err, newCamp) => {
 		if(err){
 			console.log("Cannot add this campground to db");
-			console.log("Error : " + err);
+			console.log("Index Post Error : " + err);
 		} else {
-			res.redirect("/campings");
+			res.redirect("/index");
 		}
 	});
 });
 
-//Define add new campground route
-app.get("/campings/formulaire", (req, res) => {
+
+//NEW - Show form to create a new campground
+app.get("/index/formulaire", (req, res) => {
 	res.render("formulaire");
 });
 
-//Define port for server
-app.listen(PORT, () => {
-	console.log("The YelpCamp project server listen on port 3000");
+
+//SHOW - Show info about a particular campground
+app.get("/index/:id", (req, res) => {
+	Campground.findById(req.params.id, (err, foundCampground) =>{
+		if(err){
+			console.log("index Show Error: " + err);
+		} else {
+			res.render("show", {campgrounds: foundCampground});
+		}
+	});
 });
 
 
+//Define port for server to listen
+app.listen(PORT, () => {
+	console.log("The YelpCamp project server listen on port 3000");
+});
 
