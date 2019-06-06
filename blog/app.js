@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 //Setting db schema with mongoose
 const blogSchema = new mongoose.Schema({
 	title: String,
-	image: {type: String, default: "https://images.unsplash.com/photo-1519659528534-7fd733a832a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1226&q=80"},
+	image: String,
 	body: String,
 	created: {type: Date, default: Date.now}
 });
@@ -45,8 +45,33 @@ app.get("/blogs", (req, res) => {
 		
 });
 
+//NEW ROUTE
+app.get("/blogs/new", (req, res) => {
+	res.render("new");
+});
+
+//CREATE ROUTE
+app.post("/blogs", (req, res) => {
+	Blog.create(req.body.blog, (err, newBlog) => {
+		if(err){
+			res.render('new');
+		} else {
+			res.redirect("/blogs");
+		}
+	});
+});
 
 
+//SHOW ROUTE
+app.get("/blogs/:id", (req, res) => {
+	Blog.findById(req.params.id, (err, foundBlog) =>{
+		if(err){
+			res.redirect("/blogs");
+		} else {
+			res.render("show", {blog: foundBlog});
+		}
+	});
+});
 
 //setting the server on port 3000
 app.listen(PORT, () => {
