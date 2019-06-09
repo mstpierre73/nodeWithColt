@@ -11,9 +11,16 @@
 			<div class="description" >
 				<p><%- blog.body %></p>
 			</div>
+			<div class="ui inverted segment">
+				<form method="POST" action="/blogs/<%= blog._id %>?_method=DELETE">
+					<a class="ui inverted basic button" href="/blogs/<%= blog._id %>/edit">Edit this post</a>
+					<button class="ui inverted red button">Delete this post</button>
+				</form>
+			</div>
 		</div>		
 	</div>
 </div>
 
 
 <% include ./partials/footer %>
+
