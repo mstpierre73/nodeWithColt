@@ -11,15 +11,18 @@ const app = express();
 
 //APP SETTINGS ========================================================================================
 
-//Define engine template for ejs
-app.set("view engine", "ejs");
+//connect the Database
+mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true});
+mongoose.set('useFindAndModify', false);
 
 //Setting bodyParser
 app.use(bodyParser.urlencoded({extended: true}));
 
-//connect the Database
-mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true});
-mongoose.set('useFindAndModify', false);
+//Define engine template for ejs
+app.set("view engine", "ejs");
+
+//Define custom stylesheets
+app.use(express.static(__dirname + "/public"));
 
 //Run seedDB when server start remove all items from DB and repopulate with basic testing datas
 seedDB();
