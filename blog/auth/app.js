@@ -1,14 +1,29 @@
 const express = require('express');
-const app = express();
 const PORT = 3000;
 const LOCALHOST = 127001;
 const mongoose = require('mongoose');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+const localStrategy = require('passport-local');
+const passportLocalMongoose = require('passport-local-mongoose');
+const User = require('./models/user');
 
 
 //Settings of the app
-app.set('view engine', 'ejs');
 mongoose.connect('mongodb://localhost/secret', {useNewUrlParser: true});
 mongoose.set('useFindAndModify', false);
+const app = express();
+app.set('view engine', 'ejs');
+app.use(require('express-session')({
+	secret: "It is hard to learn programming but I love it",
+	resave: false,
+	saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 //ROUTES ==============================================================================
 
