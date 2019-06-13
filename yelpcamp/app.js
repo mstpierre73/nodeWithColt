@@ -1,32 +1,53 @@
 //Declare const variables
 const express = require("express");
-const request = require("request");
+const app = express();
 const bodyParser =require("body-parser");
 const mongoose = require("mongoose");
+const passport = require("passport");
+const localStrategy = require("passport-local");
 const Campground = require('./models/campground');
 const Comment = require('./models/comment');
+const User = require('./models/user');
 const seedDB = require('./seeds');
 const PORT = 3000;
-const app = express();
+
 
 //APP SETTINGS ========================================================================================
 
-//connect the Database
+//connect to the Database and update for some deprecation warning
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true});
 mongoose.set('useFindAndModify', false);
 
-//Setting bodyParser
+//Setting bodyParser to get info from forms
 app.use(bodyParser.urlencoded({extended: true}));
 
 //Define engine template for ejs
 app.set("view engine", "ejs");
 
-//Define custom stylesheets
+//Define the path to custom stylesheets
 app.use(express.static(__dirname + "/public"));
 
 //Run seedDB when server start remove all items from DB and repopulate with basic testing datas
 seedDB();
 
+//Passport configuration
+app.use(require('express-session')({
+	secret: "This is my first true complex app!",
+	resave: false,
+	saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//Define a middleware
+app.use((req, res, next)=>{
+	res.locals.currentUser = req.user;
+	next();
+});
 
 // APP ROUTES ======================================================================================
 
@@ -52,7 +73,7 @@ app.get("/index", (req, res) => {
 
 //Define POST campings route 
 //CREATE - add new campground to DB
-app.post("/index", (req, res) => {
+app.post("/index", isLoggedIn, (req, res) => {
 	let newCamp = req.body.newCamp;
 	let imgURL = req.body.imgURL;
 	let description = req.body.description;
@@ -69,7 +90,7 @@ app.post("/index", (req, res) => {
 
 
 //NEW - Show form to create a new campground
-app.get("/index/formulaire", (req, res) => {
+app.get("/index/formulaire", isLoggedIn, (req, res) => {
 	res.render("campgrounds/formulaire");
 });
 
@@ -87,11 +108,11 @@ app.get("/index/:id", (req, res) => {
 });
 
 //COMMENTS ROUTES ===================================================================================
-
-app.get("/index/:id/comments/new", (req, res) =>{
+//Show the form to make new comment, associated with a paricular campground
+app.get("/index/:id/comments/new", isLoggedIn, (req, res) =>{
 	Campground.findById(req.params.id, (err, campgrounds)=> {
 		if(err){
-			console.log("Cannot find the comments associated with this campground.");
+			console.log("Cannot find the comments form associated with this campground.");
 			console.log("Index comments Error: " + err);
 		} else {
 			res.render("comments/new", {campgrounds: campgrounds});
@@ -99,16 +120,18 @@ app.get("/index/:id/comments/new", (req, res) =>{
 	});
 });
 
-app.post("/index/:id/comments", (req, res) =>{
+//Send the data from the comment form associated with a particular campground
+app.post("/index/:id/comments", isLoggedIn, (req, res) =>{
 	Campground.findById(req.params.id, (err, campgrounds) => {
 		if(err){
-			console.log("Cannot post your comment on this campground.");
+			console.log("Cannot receive your comment on this campground.");
 			console.log("index post comment Error: " + err);
 			res.redirect("/index");
 		} else {
 			Comment.create(req.body.comment, (err, comment) => {
 				if(err){
-					console.log(err);
+					console.log("Cannot post your comment on this campground.");
+					console.log("index post comment Error: " + err);
 				} else {
 					campgrounds.comments.push(comment);
 					campgrounds.save();
@@ -118,6 +141,55 @@ app.post("/index/:id/comments", (req, res) =>{
 		}
 	});
 });
+
+//AUTHENTICATION ROUTES======================================================================================
+
+//Show the signUp form
+app.get("/register", (req, res) =>{
+	res.render("register");
+});
+
+//get data from the signUp form
+app.post("/register", (req, res) =>{
+	let newUser = new User({username: req.body.username});
+	User.register(newUser, req.body.password, (err, user)=>{
+		if(err){
+			console.log("cannot receive data from the signUp form");
+			console.log("SignUp form Error: " + err);
+			return res.render("register");
+		} 
+		passport.authenticate("local")(req, res, ()=>{
+			res.redirect("/index");
+		});
+	});
+});
+
+//Show the login form
+app.get("/login", (req, res) =>{
+	res.render("login");
+});
+
+//get data from the signUp form
+app.post("/login", passport.authenticate("local", 
+	{successRedirect: "/index", failureRedirect: "/login"}),
+	(req, res) =>{});
+
+//Show the logout page
+app.get("/logout", (req, res) =>{
+	req.logout();
+	res.redirect("/index");
+});
+
+//CREATE MIDDLEWARE===================================================================================
+
+//function to check if user is logged in
+function isLoggedIn(req, res, next){
+	if(req.isAuthenticated()){
+		return next();
+	}
+	res.redirect("/login");
+}
+
 
 
 //SERVER LISTENING ===================================================================================

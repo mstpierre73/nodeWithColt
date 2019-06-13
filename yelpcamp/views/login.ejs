@@ -1,0 +1,15 @@
+<% include partials/header %>
+
+<h1>Connectez-vous à votre compte</h1>
+
+<form action="/login" method="POST">
+	<label>Nom d'usager</label>
+	<input type="text" name="username" placeholder="Entrez votre nom d'usager"/ required>
+	<label>Courriel</label>
+	<input type="email" name="email" placeholder="Entrez votre adresse courriel"/ required>
+	<label>Mot de passe</label>
+	<input type="password" name="password" placeholder="Entrez votre mot de passe" required/>
+	<button>Soumettre</button>
+</form>
+
+<% include partials/footer %>
