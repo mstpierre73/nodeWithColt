@@ -16,7 +16,9 @@
 				<div class="caption-full">
 					<h4 class="pull-right">Camping rustique 26,40$/nuit</h4>
 					<h4><a href="https://www.sepaq.com/destinations/"><%=campgrounds.name %></a></h4>
-					<p><%=campgrounds.description %></p>
+					<p><%= campgrounds.description %></p>
+					<p><em>Camping recommandé par : <%= campgrounds.author.username %></em></p>
+					<a class="btn btn-warning" href="/index/<%= campgrounds._id %>/edit">Modifier</a>
 				</div>
 			</div>
 			<div class="well">
@@ -27,7 +29,7 @@
 				<% campgrounds.comments.forEach((comment) =>{ %>
 				<div class="row">
 					<div class="col-md-12">
-						<strong><%= comment.author.username %> - <%= comment.author.email %></strong>
+						<strong><%= comment.author.username %> <%= comment.author.email %></strong>
 						<span class="pull-right">Il y a 10 jours</span>
 						<p><%= comment.text %></p>
 					</div>

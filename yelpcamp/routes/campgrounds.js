@@ -23,7 +23,13 @@ router.post("/", isLoggedIn, (req, res) => {
 	let newCamp = req.body.newCamp;
 	let imgURL = req.body.imgURL;
 	let description = req.body.description;
-	let newCampObj = {name: newCamp, image: imgURL, description: description};
+	let author = {
+		id: req.user._id,
+		username: req.user.username,
+		email: req.user.email
+	};
+	let newCampObj = {name: newCamp, image: imgURL, description: description, author: author};
+	console.log(newCampObj);
 	Campground.create(newCampObj, (err, newCamp) => {
 		if(err){
 			console.log("Cannot add this campground to db");
@@ -52,6 +58,32 @@ router.get("/:id", (req, res) => {
 		}
 	});
 });
+
+//EDIT - show the edit campground form
+router.get("/:id/edit", (req, res) =>{
+	Campground.findById(req.params.id, (err, foundCampground) =>{
+		if(err){
+			console.log("cannot show edit form" + err);
+			console.log("cannot show the edit form for this particular campground");
+			res.redirect('/index');
+		} else{
+			res.render("campgrounds/edit", {campgrounds: foundCampground});
+		}
+	});
+});
+
+//UPDATE - submit the edit form
+router.put("/:id/", (req, res) =>{
+	Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) =>{
+		if(err){
+			console.log("Cannot update this campground" + err);
+			res.redirect("/index");
+		} else {
+			res.redirect("/index/" + req.params.id);
+		}
+	});
+});
+
 
 //CREATE MIDDLEWARES===================================================================================
 //function to check if user is logged in

@@ -21,7 +21,7 @@ router.get("/register", (req, res) =>{
 
 //get data from the signUp form
 router.post("/register", (req, res) =>{
-	let newUser = new User({username: req.body.username});
+	let newUser = new User({username: req.body.username, email:req.body.email});
 	User.register(newUser, req.body.password, (err, user)=>{
 		if(err){
 			console.log("cannot receive data from the signUp form");

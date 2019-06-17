@@ -11,6 +11,7 @@ const User = require('./models/user');
 const campgroundsRoutes = require('./routes/campgrounds');
 const commentsRoutes = require('./routes/comments');
 const authRoutes = require('./routes/auth');
+const methodOverride = require('method-override');
 const seedDB = require('./seeds');
 const PORT = 3000;
 
@@ -29,6 +30,9 @@ app.set("view engine", "ejs");
 
 //Define the path to custom stylesheets
 app.use(express.static(__dirname + "/public"));
+
+//define de use of method-override
+app.use(methodOverride('_method'));
 
 //Run seedDB when server start remove all items from DB and repopulate with basic testing datas
 //seedDB();
