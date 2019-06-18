@@ -50,7 +50,10 @@ function seedDB(){
 					Comment.create(
 						{
 							text: "This place is great but I wish there was internet connexion",
-							author:"Homer"
+							author: {
+								id: "588c2e092403d111454fff76",
+								username: "Homer"
+							}
 						}, (err, comment) =>{
 							if(err){
 								console.log(err);

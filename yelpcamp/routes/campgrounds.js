@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Campground = require('../models/campground');
+const Comment = require('../models/comment');
 
 
 //INDEX OF CAMPGROUNDS ROUTES ===================================================================================
@@ -29,7 +30,6 @@ router.post("/", isLoggedIn, (req, res) => {
 		email: req.user.email
 	};
 	let newCampObj = {name: newCamp, image: imgURL, description: description, author: author};
-	console.log(newCampObj);
 	Campground.create(newCampObj, (err, newCamp) => {
 		if(err){
 			console.log("Cannot add this campground to db");
@@ -60,26 +60,41 @@ router.get("/:id", (req, res) => {
 });
 
 //EDIT - show the edit campground form
-router.get("/:id/edit", (req, res) =>{
+router.get("/:id/edit", checkCampgroundOwnership, (req, res) =>{
 	Campground.findById(req.params.id, (err, foundCampground) =>{
 		if(err){
-			console.log("cannot show edit form" + err);
-			console.log("cannot show the edit form for this particular campground");
-			res.redirect('/index');
-		} else{
-			res.render("campgrounds/edit", {campgrounds: foundCampground});
+			res.redirect("/index");
+		} else {
+			res.render("campgrounds/edit", {campgrounds: foundCampground});	
 		}
 	});
 });
 
 //UPDATE - submit the edit form
-router.put("/:id/", (req, res) =>{
+router.put("/:id/", checkCampgroundOwnership, (req, res) =>{
 	Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) =>{
 		if(err){
 			console.log("Cannot update this campground" + err);
 			res.redirect("/index");
 		} else {
 			res.redirect("/index/" + req.params.id);
+		}
+	});
+});
+
+//DELETE campground
+router.delete("/:id", checkCampgroundOwnership, (req, res) =>{
+	Campground.findByIdAndRemove(req.params.id, (err, campgroundRemoved)=>{
+		if(err){
+			console.log(err);
+			res.redirect("/index");
+		} else {
+			Comment.deleteMany({_id: {$in: campgroundRemoved.comments}}, (err)=>{
+				if(err){
+					console.log(err);
+				}
+				res.redirect("/index");
+			});
 		}
 	});
 });
@@ -93,5 +108,28 @@ function isLoggedIn(req, res, next){
 	}
 	res.redirect("/login");
 }
+
+function checkCampgroundOwnership(req, res, next){
+	//Is user logged in?
+	if(req.isAuthenticated()){
+		Campground.findById(req.params.id, (err, foundCampground) =>{
+			if(err){
+				console.log("cannot show edit form" + err);
+				console.log("cannot show the edit form for this particular campground");
+				res.redirect('back');
+			} else{
+				//Does this user created the campground? 
+				if(foundCampground.author.id.equals(req.user._id)){
+					next();
+				} else {
+					res.redirect("back");
+				}
+			}
+		});
+	} else {
+		res.redirect("/login");
+	}
+}
+
 
 module.exports = router;

@@ -18,9 +18,16 @@
 					<h4><a href="https://www.sepaq.com/destinations/"><%=campgrounds.name %></a></h4>
 					<p><%= campgrounds.description %></p>
 					<p><em>Camping recommandé par : <%= campgrounds.author.username %></em></p>
-					<a class="btn btn-warning" href="/index/<%= campgrounds._id %>/edit">Modifier</a>
+					
+					<% if(currentUser && campgrounds.author.id.equals(currentUser._id)) { %>
+						<a class="btn btn-xs btn-warning" href="/index/<%= campgrounds._id %>/edit">Modifier</a>
+						<form id="delete-form" action="/index/<%= campgrounds._id %>?_method=DELETE" method="POST">
+							<button class="btn btn-xs btn-danger">Effacer</button>
+						</form>  
+					<% } %>
 				</div>
 			</div>
+			
 			<div class="well">
 				<div class="text-right">
 					<a class="btn btn-primary" href="/index/<%= campgrounds._id  %>/comments/new">Laissez un commentaire</a>
