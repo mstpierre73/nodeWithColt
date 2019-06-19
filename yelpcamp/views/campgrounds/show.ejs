@@ -21,7 +21,7 @@
 					
 					<% if(currentUser && campgrounds.author.id.equals(currentUser._id)) { %>
 						<a class="btn btn-xs btn-warning" href="/index/<%= campgrounds._id %>/edit">Modifier</a>
-						<form id="delete-form" action="/index/<%= campgrounds._id %>?_method=DELETE" method="POST">
+						<form class="delete-form" action="/index/<%= campgrounds._id %>?_method=DELETE" method="POST">
 							<button class="btn btn-xs btn-danger">Effacer</button>
 						</form>  
 					<% } %>
@@ -39,6 +39,14 @@
 						<strong><%= comment.author.username %> <%= comment.author.email %></strong>
 						<span class="pull-right">Il y a 10 jours</span>
 						<p><%= comment.text %></p>
+						<% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
+							<a class="btn btn-xs btn-warning" 
+							   href="/index/<%=campgrounds._id%>/comments/<%=comment._id %>/edit">Modifier</a>
+							<form class="delete-form" 
+								  action="/index/<%= campgrounds._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+								<button class="btn btn-xs btn-danger">Effacer</button>
+							</form>
+						<% } %>
 					</div>
 				</div>
 				<% }); %>
@@ -46,9 +54,5 @@
 		</div>
 	</div>
 </div>
-
-
-
-
 
 <% include ../partials/footer %>

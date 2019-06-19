@@ -109,6 +109,7 @@ function isLoggedIn(req, res, next){
 	res.redirect("/login");
 }
 
+//function to check if a campground is linked to a particular user.
 function checkCampgroundOwnership(req, res, next){
 	//Is user logged in?
 	if(req.isAuthenticated()){

@@ -42,6 +42,40 @@ router.post("/", isLoggedIn, (req, res) =>{
 	});
 });
 
+//EDIT COMMENT FORM
+router.get("/:comment_id/edit", checkCommentOwnership, (req, res) =>{
+	Comment.findById(req.params.comment_id, (err, foundComment) =>{
+		if(err){
+			res.redirect("back");
+		} else {
+			res.render("comments/edit", {campgrounds_id: req.params.id, comment: foundComment});
+		}
+	});
+});
+
+//UPDATE COMMENT ROUTES
+router.put("/:comment_id", checkCommentOwnership, (req, res) =>{
+	Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment) =>{
+		if(err){
+			res.redirect("back");
+		} else {
+			res.redirect("/index/" + req.params.id);
+		}
+	});
+});
+
+//DELETE COMMENT
+router.delete("/:comment_id", checkCommentOwnership, (req, res)=>{
+	Comment.findByIdAndRemove(req.params.comment_id, (err)=>{
+		if(err){
+			res.redirect("back");
+		} else {
+			res.redirect("/index/" + req.params.id);
+		}
+	});
+});
+
+
 //CREATE MIDDLEWARES===================================================================================
 //function to check if user is logged in
 function isLoggedIn(req, res, next){
@@ -49,6 +83,27 @@ function isLoggedIn(req, res, next){
 		return next();
 	}
 	res.redirect("/login");
+}
+
+//function to check if a comment is linked to a particular user
+function checkCommentOwnership(req, res, next){
+	//Is user logged in?
+	if(req.isAuthenticated()){
+		Comment.findById(req.params.comment_id, (err, foundComment) =>{
+			if(err){
+				res.redirect('back');
+			} else{
+				//Does this user created the comment? 
+				if(foundComment.author.id.equals(req.user._id)){
+					next();
+				} else {
+					res.redirect("back");
+				}
+			}
+		});
+	} else {
+		res.redirect("/login");
+	}
 }
 
 module.exports = router;
