@@ -24,11 +24,12 @@ router.post("/register", (req, res) =>{
 	let newUser = new User({username: req.body.username, email:req.body.email});
 	User.register(newUser, req.body.password, (err, user)=>{
 		if(err){
-			console.log("cannot receive data from the signUp form");
-			console.log("SignUp form Error: " + err);
-			return res.render("register");
+			console.log("cannot receive data from the signUp form: " + err);
+			req.flash("error", "Nous n'avons pas pu effectuer votre enregistrement: " + err.message);
+			return res.redirect("/register");
 		} 
 		passport.authenticate("local")(req, res, ()=>{
+			req.flash("success", "Bienvenue à CampiFav, " + user.username + ", votre compte est activé.");
 			res.redirect("/index");
 		});
 	});
@@ -47,16 +48,9 @@ router.post("/login", passport.authenticate("local",
 //Show the logout page
 router.get("/logout", (req, res) =>{
 	req.logout();
+	req.flash("success", "Vous êtes maintenant déconnecté de votre compte.");
 	res.redirect("/index");
 });
 
-//CREATE MIDDLEWARES===================================================================================
-//function to check if user is logged in
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	res.redirect("/login");
-}
 
 module.exports = router;

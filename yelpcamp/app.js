@@ -13,6 +13,7 @@ const commentsRoutes = require('./routes/comments');
 const authRoutes = require('./routes/auth');
 const methodOverride = require('method-override');
 const seedDB = require('./seeds');
+const flash = require('connect-flash');
 const PORT = 3000;
 
 
@@ -31,8 +32,11 @@ app.set("view engine", "ejs");
 //Define the path to custom stylesheets
 app.use(express.static(__dirname + "/public"));
 
-//define de use of method-override
+//define the use of method-override to make put and delete requests
 app.use(methodOverride('_method'));
+
+//Define the use of connect-flash for message to users
+app.use(flash());
 
 //Run seedDB when server start remove all items from DB and repopulate with basic testing datas
 //seedDB();
@@ -57,6 +61,8 @@ passport.deserializeUser(User.deserializeUser());
 //Define a middleware to get user data before rendering every pages
 app.use((req, res, next)=>{
 	res.locals.currentUser = req.user;
+	res.locals.error = req.flash("error");
+	res.locals.success = req.flash("success");
 	next();
 });
 
