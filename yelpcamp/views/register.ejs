@@ -1,15 +1,27 @@
 <% include partials/header %>
 
-<h1>Inscrivez-vous à CampiFav!</h1>
+<div class="container">
+	<div class="row">
+		<h1 class="text-center">Inscrivez-vous à CampiFav!</h1>
+		<div class="login-style">
+			<form action="/register" method="POST">
+				<div class="form-group">
+					<input class="form-control" type="text" name="username" placeholder="Entrez votre nom d'usager" required/>
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="email" name="email" placeholder="Entrez votre adresse courriel" required/>
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="password" name="password" placeholder="Entrez votre mot de passe" required/>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-lg btn-primary btn-block">Soumettre</button>
+				</div>
+			</form>
+		</div>
 
-<form action="/register" method="POST">
-	<label>Nom d'usager</label>
-	<input type="text" name="username" placeholder="Entrez votre nom d'usager" required/>
-	<label>Courriel</label>
-	<input type="email" name="email" placeholder="Entrez votre adresse courriel" required/>
-	<label>Mot de passe</label>
-	<input type="password" name="password" placeholder="Entrez votre mot de passe" required/>
-	<button>Soumettre</button>
-</form>
+	</div>
+</div>
+
 
 <% include partials/footer %>

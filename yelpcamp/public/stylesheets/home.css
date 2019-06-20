@@ -1,0 +1,83 @@
+body {
+	background-color: #000;
+}
+
+#landing-header{
+	position:relative;
+	z-index: 1;
+	text-align: center;
+	padding-top: 40vh;
+}
+
+#landing-header h1, #landing-header p, #footer  {
+  	color: #fff;
+	padding-bottom: 10px;
+}
+
+#landing-button {
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+.slideshow { 
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.slideshow li { 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  z-index: 0;
+  animation: imageAnimation 50s linear infinite; 
+}
+
+.slideshow li:nth-child(1) { 
+  background-image: url(https://s3.amazonaws.com/imagescloud/images/cards/parcs-nationaux/pq-sag.jpg); 
+}
+.slideshow li:nth-child(2) { 
+  background-image: url(https://s3.amazonaws.com/imagescloud/images/medias/camping/jac_120220_49.jpg);
+  animation-delay: 10s; 
+} 
+.slideshow li:nth-child(3) { 
+  background-image: url(https://www.voyagevoyage.ca/image/policy:1.1531884:1437744170/Tente-de-camping-au-coucher-de-soleil.jpg?w=1023&$p$w=dd7f34c);
+  animation-delay: 20s; 
+}
+.slideshow li:nth-child(4) { 
+  background-image: url(https://www.voyagevoyage.ca/image/policy:1.1464901:1421860126/Tente-de-camping.jpg?w=1023&$p$w=0ba776b);
+  animation-delay: 30s; 
+}
+.slideshow li:nth-child(5) { 
+  background-image: url(https://s3.amazonaws.com/imagescloud/images/medias/blogue/annexe-camping-automne-principale.jpg);
+  animation-delay: 40s; 
+}
+
+@keyframes imageAnimation { 
+  0% { 
+    opacity: 0; 
+    animation-timing-function: ease-in;
+  }
+  10% {
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  20% {
+    opacity: 1
+  }
+  30% {
+    opacity: 0
+  }
+}

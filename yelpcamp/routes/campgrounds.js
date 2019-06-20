@@ -24,12 +24,13 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 	let newCamp = req.body.newCamp;
 	let imgURL = req.body.imgURL;
 	let description = req.body.description;
+	let price = req.body.price;
 	let author = {
 		id: req.user._id,
 		username: req.user.username,
 		email: req.user.email
 	};
-	let newCampObj = {name: newCamp, image: imgURL, description: description, author: author};
+	let newCampObj = {name: newCamp, image: imgURL, description: description, price: price, author: author};
 	Campground.create(newCampObj, (err, newCamp) => {
 		if(err){
 			console.log("Cannot add this campground to db : " + err);
@@ -49,8 +50,10 @@ router.get("/formulaire", middleware.isLoggedIn, (req, res) => {
 //SHOW - Show info about a particular campground
 router.get("/:id", (req, res) => {
 	Campground.findById(req.params.id).populate("comments").exec( (err, foundCampground) =>{
-		if(err){
+		if(err || !foundCampground){
 			console.log("Cannot show this particular campground: " + err);
+			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données.");
+			res.redirect("/index");
 		} else {
 			res.render("campgrounds/show", {campgrounds: foundCampground});
 		}

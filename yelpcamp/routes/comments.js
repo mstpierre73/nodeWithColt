@@ -48,14 +48,20 @@ router.post("/", middleware.isLoggedIn, (req, res) =>{
 
 //EDIT COMMENT FORM
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, (req, res) =>{
-	Comment.findById(req.params.comment_id, (err, foundComment) =>{
-		if(err){
-			console.log("Cannot show the edit form " + err);
-			req.flash("error", "Nous n'avons pas trouvé ce commentaire dans notre base de données.");
-			res.redirect("back");
-		} else {
-			res.render("comments/edit", {campgrounds_id: req.params.id, comment: foundComment});
+	Campground.findById(req.params.id, (err, foundCampground)=>{
+		if(err || !foundCampground){
+			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données.");
+			return res.redirect("/index");
 		}
+		Comment.findById(req.params.comment_id, (err, foundComment) =>{
+			if(err){
+				console.log("Cannot show the edit form " + err);
+				req.flash("error", "Nous n'avons pas trouvé ce commentaire dans notre base de données.");
+				res.redirect("back");
+			} else {
+				res.render("comments/edit", {campgrounds_id: req.params.id, comment: foundComment});
+			}
+		});
 	});
 });
 
