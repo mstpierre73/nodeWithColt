@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
 
 //Show the signUp form
 router.get("/register", (req, res) =>{
-	res.render("register");
+	res.render("register", {page: "register"});
 });
 
 //get data from the signUp form
@@ -37,7 +37,7 @@ router.post("/register", (req, res) =>{
 
 //Show the login form
 router.get("/login", (req, res) =>{
-	res.render("login");
+	res.render("login", {page: "login"});
 });
 
 //get data from the signUp form

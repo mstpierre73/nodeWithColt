@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 		if(err){
 			console.log("Get index to show all camps Error : " + err);
 		} else {
-			res.render("campgrounds/index", {campgrounds: allCamps});
+			res.render("campgrounds/index", {campgrounds: allCamps, page: 'index'});
 		}
 	});
 });
