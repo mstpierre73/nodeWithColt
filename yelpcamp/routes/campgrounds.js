@@ -3,6 +3,16 @@ const router = express.Router();
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
 const middleware = require('../middleware');
+const nodeGeocoder = require('node-geocoder');
+
+const options = {
+	provider: 'google',
+	httpAdapter: 'https',
+	apiKey: process.env.GEOCODER_API_KEY,
+	formatter: null
+};
+
+const geocoder = nodeGeocoder(options);
 
 
 //INDEX OF CAMPGROUNDS ROUTES ===================================================================================
@@ -21,6 +31,7 @@ router.get("/", (req, res) => {
 //Define POST campings route 
 //CREATE - add new campground to DB
 router.post("/", middleware.isLoggedIn, (req, res) => {
+	//Get data from form and create an campground object
 	let newCamp = req.body.newCamp;
 	let imgURL = req.body.imgURL;
 	let description = req.body.description;
@@ -30,7 +41,20 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 		username: req.user.username,
 		email: req.user.email
 	};
-	let newCampObj = {name: newCamp, image: imgURL, description: description, price: price, author: author};
+	
+	geocoder.geocode(req.body.location, function (err, data) {
+    if (err || !data.length) {
+		console.log("geocoder error : " + err);
+      	req.flash('error', 'Adresse invalide');
+      	return res.redirect('back');
+    }
+    let lat = data[0].latitude;
+    let lng = data[0].longitude;
+    let location = data[0].formattedAddress;
+	
+	let newCampObj = {name: newCamp, image: imgURL, description: description, price: price, author: author, location: location, lat: lat, lng: lng};
+	
+	//Create the campground and add it to DB
 	Campground.create(newCampObj, (err, newCamp) => {
 		if(err){
 			console.log("Cannot add this campground to db : " + err);
@@ -38,6 +62,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 			res.redirect("/index");
 		}
 	});
+});
 });
 
 
@@ -68,22 +93,37 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) =>{
 			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données.");
 			res.redirect("/index");
 		} else {
-			res.render("campgrounds/edit", {campgrounds: foundCampground});	
+			res.render("campgrounds/edit", {campground: foundCampground});	
 		}
 	});
 });
 
 //UPDATE - submit the edit form
 router.put("/:id/", middleware.checkCampgroundOwnership, (req, res) =>{
+	
+	geocoder.geocode(req.body.location, function (err, data) {
+		if(err || !data.length){
+			console.log(err.message);
+			req.flash('error', 'Adresse invalide' + err.message);
+			return res.redirect('back');
+		}
+
+		// assign the lat, lng, and formatted address to req.body.campground
+		req.body.campground.location = data[0].formattedAddress;
+		req.body.campground.lat = data[0].latitude;
+		req.body.campground.lng = data[0].longitude;
+	
 	Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) =>{
 		if(err){
 			console.log("Cannot update this campground" + err);
-			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données.");
+			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données." + err.message);
 			res.redirect("/index");
 		} else {
-			res.redirect("/index/" + req.params.id);
+			req.flash('success', "Les informations concernant ce camping ont été mises à jour");
+			res.redirect("/index/" + updatedCampground._id);
 		}
 	});
+});
 });
 
 //DELETE campground
@@ -96,7 +136,6 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) =>{
 		} else {
 			Comment.deleteMany({_id: {$in: campgroundRemoved.comments}}, (err)=>{
 				if("Cannot delete comments associated with this camp : " + err){
-					console.log(err);
 				}
 				req.flash("success", "Ce camping a été effacé.");
 				res.redirect("/index");

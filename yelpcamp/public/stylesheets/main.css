@@ -23,6 +23,14 @@
 	margin: 25px auto;
 }
 
+#map {
+	width: 100%;
+	height: 400px;
+}
+
+label {
+	display: none;
+}
 
 
 
