@@ -93,7 +93,7 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) =>{
 			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données.");
 			res.redirect("/index");
 		} else {
-			res.render("campgrounds/edit", {campgrounds: foundCampground});	
+			res.render("campgrounds/edit", {campground: foundCampground});	
 		}
 	});
 });
@@ -103,22 +103,24 @@ router.put("/:id/", middleware.checkCampgroundOwnership, (req, res) =>{
 	
 	geocoder.geocode(req.body.location, function (err, data) {
 		if(err || !data.length){
+			console.log(err.message);
 			req.flash('error', 'Adresse invalide' + err.message);
 			return res.redirect('back');
 		}
-		let lat = data[0].latitude;
-		let lng = data[0].longitude;
-		let location = data[0].formattedAddress;
-		let newData = {name: req.body.name, image: req.body.image, description: req.body.description, price: req.body.price, location: location, lat: lat, lng: lng};
+
+		// assign the lat, lng, and formatted address to req.body.campground
+		req.body.campground.location = data[0].formattedAddress;
+		req.body.campground.lat = data[0].latitude;
+		req.body.campground.lng = data[0].longitude;
 	
-	Campground.findByIdAndUpdate(req.params.id, {$set: newData}, (err, updatedCampground) =>{
+	Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) =>{
 		if(err){
 			console.log("Cannot update this campground" + err);
 			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données." + err.message);
 			res.redirect("/index");
 		} else {
 			req.flash('success', "Les informations concernant ce camping ont été mises à jour");
-			res.redirect("/index/" + campground._id);
+			res.redirect("/index/" + updatedCampground._id);
 		}
 	});
 });
