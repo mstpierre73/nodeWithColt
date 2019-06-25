@@ -39,6 +39,9 @@ app.use(methodOverride('_method'));
 //Define the use of connect-flash for message to users
 app.use(flash());
 
+//Define the use of moment.js for creation of time stamp
+app.locals.moment = require('moment');
+
 //Run seedDB when server start remove all items from DB and repopulate with basic testing datas
 //seedDB();
 
@@ -80,4 +83,4 @@ app.listen(PORT || process.env.PORT, process.env.IP, () => {
 	console.log("The YelpCamp project server listen on port 3000");
 });
 
-//test
+
