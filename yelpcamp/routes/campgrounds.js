@@ -93,7 +93,7 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) =>{
 			req.flash("error", "Nous n'avons pas trouvé ce camping dans notre base de données.");
 			res.redirect("/index");
 		} else {
-			res.render("campgrounds/edit", {campground: foundCampground});	
+			res.render("campgrounds/edit", {campgrounds: foundCampground});	
 		}
 	});
 });
