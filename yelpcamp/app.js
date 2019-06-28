@@ -23,6 +23,7 @@ const PORT = 3000;
 //connect to the Database and update for some deprecation warning
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true});
 mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 //Setting bodyParser to get info from forms
 app.use(bodyParser.urlencoded({extended: true}));
