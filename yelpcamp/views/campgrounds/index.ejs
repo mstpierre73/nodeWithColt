@@ -5,7 +5,15 @@
 		<div class="container text-center">
 			<h1><i class="fas fa-campground"></i>Les campings favoris du Québec</h1>
 			<p>Découvrez notre sélection des meilleurs endroits pour faire du camping au Québec!</p>
-			<a class="btn btn-primary btn-large" href="index/formulaire">Ajouter un nouveau camping</a>
+			<p><a class="btn btn-success btn-large" href="index/formulaire">Ajouter un nouveau camping</a></p>
+			<p>
+			<form action="/index" method="GET" class="form-inline">
+				<div class="form-group">
+					<input type="text" name="search" placeholder="Nom du campging" class="form-control">
+					<input type="submit" value="Rechercher" class="btn btn-success">
+				</div>
+			</form>
+			</p>
 		</div>
 	</header>
 
@@ -17,7 +25,7 @@
 				<div class="caption">
 					<h4><%= camp.name %></h4>
 				</div>
-				<p><a class="btn btn-primary" href="/index/<%= camp._id  %>">Plus d'information</a></p>
+				<p><a class="btn btn-success" href="/index/<%= camp._id  %>">Plus d'information</a></p>
 			</div>
 
 		</div>

@@ -16,15 +16,32 @@ const geocoder = nodeGeocoder(options);
 
 
 //INDEX OF CAMPGROUNDS ROUTES ===================================================================================
-//INDEX - Show all campgrounds from DB
+//INDEX - Show all campgrounds from DB and if necessary, research a specific campground
 router.get("/", (req, res) => {
-	Campground.find({}, (err, allCamps) => {
-		if(err){
-			console.log("Get index to show all camps Error : " + err);
-		} else {
-			res.render("campgrounds/index", {campgrounds: allCamps, page: 'index'});
-		}
-	});
+	//research a specific campground
+	if(req.query.search){
+		const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+		Campground.find({name: regex}, (err, allCamps) => {
+			if(err){
+				console.log("Get index to show all camps Error : " + err);
+			} else {
+				if(allCamps.length < 1){
+					req.flash("error", "Aucun campgin ne correspond à cette recherche, essayez à nouveau."); 
+					return res.redirect('back');
+				}
+				res.render("campgrounds/index", {campgrounds: allCamps, page: 'index'});
+			}
+		});
+	} else {
+		//research all campgrounds
+		Campground.find({}, (err, allCamps) => {
+			if(err){
+				console.log("Get index to show all camps Error : " + err);
+			} else {
+				res.render("campgrounds/index", {campgrounds: allCamps, page: 'index'});
+			}
+		});
+	}
 });
 
 
@@ -144,5 +161,8 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) =>{
 	});
 });
 
+function escapeRegex(text){
+	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");	
+}
 
 module.exports = router;
