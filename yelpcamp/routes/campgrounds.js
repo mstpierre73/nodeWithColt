@@ -21,7 +21,7 @@ router.get("/", (req, res) => {
 	//research a specific campground
 	if(req.query.search){
 		const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-		Campground.find({name: regex}, (err, allCamps) => {
+		Campground.find({$or:[{name: regex}, {location: regex}, {"author.username":regex}]}, (err, allCamps) => {
 			if(err){
 				console.log("Get index to show all camps Error : " + err);
 			} else {
