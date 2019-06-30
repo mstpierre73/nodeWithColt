@@ -1,7 +1,10 @@
 <% include partials/header %>
 <div class="container">
 	<div class="row">
-		<h1 class="text-center">Connectez-vous à votre compte</h1>
+		<div class="col-md-12">
+			<h1 class="text-center">Connectez-vous à votre compte</h1>	
+		</div>
+		
 		<div class="login-style">
 			<form action="/login" method="POST">
 				<div class="form-group">
@@ -17,10 +20,10 @@
 					<input class="form-control" type="password" name="password" placeholder="Entrez votre mot de passe" required/>
 				</div>
 				<div class="form-group">
-					<button class="btn btn-lg btn-primary btn-block">Soumettre</button>
+					<button class="btn btn-lg btn-success btn-block">Soumettre</button>
 				</div>
 			</form>
-			<a class="btn btn-xs btn-warning btn-block" href="/forgot">Mot de passe oublié</a>
+			<a class="btn btn-sm btn-outline-warning btn-block" href="/forgot">Mot de passe oublié</a>
 		</div>
 	</div>
 </div>

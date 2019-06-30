@@ -5,33 +5,25 @@
 		<div class="container text-center">
 			<h1><i class="fas fa-campground"></i>Les campings favoris du Québec</h1>
 			<p>Découvrez notre sélection des meilleurs endroits pour faire du camping au Québec!</p>
-			<p><a class="btn btn-success btn-large" href="index/formulaire">Ajouter un nouveau camping</a></p>
-			<p>
-			<form action="/index" method="GET" class="form-inline">
-				<div class="form-group">
-					<input type="text" name="search" placeholder="Nom du campging" class="form-control">
-					<input type="submit" value="Rechercher" class="btn btn-success">
-				</div>
-			</form>
-			</p>
+			<p><a class="btn btn-success btn-large my-2" href="index/formulaire">Ajouter un nouveau camping</a></p>
 		</div>
 	</header>
 
-	<div class="row text-center" style="display:flex; flex-wrap:wrap;">
+	<div class="row text-center">
 		<% campgrounds.forEach((camp) => { %>
-		<div class="col-md-3 col-sm-6">
-			<div class="thumbnail">
-				<img src="<%= camp.image %>" />	
-				<div class="caption">
-					<h4><%= camp.name %></h4>
-				</div>
-				<p><a class="btn btn-success" href="/index/<%= camp._id  %>">Plus d'information</a></p>
-			</div>
-
+		<div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+			<div class="card">
+  				<img src="<%= camp.image %>" class="card-img-top" id="index-img" alt="photo du camping: <%= camp.name %>">
+  				<div class="card-body">
+    				<h5 class="card-title"><%= camp.name %></h5>
+    				<p class="card-text"><%=camp.description.substring(0, 70)%>...</p>
+    				<a href="/index/<%= camp._id  %>" class="btn btn-success">Plus d'information</a>
+  			</div>
+		</div>
 		</div>
 		<% }); %>
-	</div>
-	
+		</div>
 </div>
+
 <% include ../partials/footer %>
 

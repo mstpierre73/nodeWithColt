@@ -2,7 +2,10 @@
 
 <div class="container">
 	<div class="row">
-		<h1 class="text-center">Modifier <%= campgrounds.name %></h1>
+		<div class="col-md-12">
+			<h1 class="text-center">Modifier <%= campgrounds.name %></h1>
+		</div>
+		
 		<div class="login-style">
 			<form action="/index/<%= campgrounds._id %>?_method=PUT" method="POST">
 				<div class="form-group">
@@ -18,15 +21,19 @@
 					<input class="form-control" type="text" value="<%= campgrounds.description %>" name="campground[description]" required/>
 				</div>
 				<div class="form-group">
-					<label for="location">Endroit</label>
+					<label for="location">Adresse du camping</label>
 					<input id="location" class="form-control" type="text" name="location" value="<%= campgrounds.location %>" name="campground[location]" required/>
+				</div>
+				<div class="form-group">
+					<label for="Url du camping">Url du camping</label>
+					<input id="urlCamping" class="form-control" type="text" value="<%= campgrounds.urlCamping %>" name="campground[urlCamping]" required/>
 				</div>					
 				<div class="form-group">
 					<label for="price">Prix</label>
 					<input class="form-control" type="number" value="<%= campgrounds.price %>" name="campground[price]" min="0.00" step="0.01" required/>
 				</div>				
 				<div class="form-group">
-					<button class= "btn btn-lg btn-primary btn-block">Soumettre</button> 
+					<button class= "btn btn-lg btn-success btn-block">Soumettre</button> 
 				</div>
 			</form>
 		</div>

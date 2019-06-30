@@ -1,26 +1,42 @@
-.thumbnail img {
-	width: 100%;
-}
+/*Jumbotron*/
 
-.thumbnail {
-	padding: 0;
-}
-
-.thumbnail .caption-full {
-	padding: 10px
+.jumbotron {
+	background-image: url('https://images.unsplash.com/photo-1415378102122-81ca7015e28b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80');
+	color: white;
+	text-shadow: 2px 2px 4px #000;
 }
 
 .fa-campground {
 	margin: 2%;
 }
 
-.delete-form {
-	display: inline;
+/*index of campgrounds*/
+
+#index-img {
+	max-height: 35vh;
 }
 
-.login-style {
-	width: 30%;
-	margin: 25px auto;
+/*show page*/
+
+.list-group-item.active{
+	background-color: #28a745;
+	border-color: #28a745;
+}
+
+#headingOne, #headingTwo {
+	background-color: #28a745;
+	border-color: #28a745;
+}
+
+.btn-link {
+	color: white;
+	text-align: left;
+}
+
+.btn-link:hover {
+	color: white;
+	text-align: left;
+	text-decoration: none;
 }
 
 #map {
@@ -28,15 +44,39 @@
 	height: 400px;
 }
 
+.delete-form {
+	display: inline;
+}
+
+/*forms*/
+
+.login-style {
+	width: 40%;
+	margin: 25px auto;
+}
+
 label {
 	display: none;
 }
 
-.jumbotron {
-	background-image: url('https://images.unsplash.com/photo-1415378102122-81ca7015e28b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80');
-	color: white;
-	text-shadow: 2px 2px 4px #000;
+/*media queries*/
+
+@media only screen and (max-width: 1000px){
+.login-style {
+	width: 60%;
+	margin: 25px auto;
 }
+}
+
+@media only screen and (max-width: 800px){
+.login-style {
+	width: 80%;
+	margin: 25px auto;
+}
+}
+
+
+
 
 
 

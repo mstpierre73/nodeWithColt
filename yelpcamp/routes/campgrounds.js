@@ -51,6 +51,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 	//Get data from form and create an campground object
 	let newCamp = req.body.newCamp;
 	let imgURL = req.body.imgURL;
+	let urlCamping = req.body.urlCamping;
 	let description = req.body.description;
 	let price = req.body.price;
 	let author = {
@@ -69,7 +70,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     let lng = data[0].longitude;
     let location = data[0].formattedAddress;
 	
-	let newCampObj = {name: newCamp, image: imgURL, description: description, price: price, author: author, location: location, lat: lat, lng: lng};
+	let newCampObj = {name: newCamp, image: imgURL, urlCamping: urlCamping, description: description, price: price, author: author, location: location, lat: lat, lng: lng};
 	
 	//Create the campground and add it to DB
 	Campground.create(newCampObj, (err, newCamp) => {
