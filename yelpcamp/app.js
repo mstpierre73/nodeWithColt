@@ -21,9 +21,21 @@ const PORT = 3000;
 //APP SETTINGS ========================================================================================
 
 //connect to the Database and update for some deprecation warning
+mongoose.connect("mongodb+srv://MariseStp:" + process.env.BD_PASSWORD + "@cluster0-ncteq.mongodb.net/test?retryWrites=true&w=majority", {
+	useNewUrlParser: true,
+	useFindAndModify: false,
+	useCreateIndex: true
+}).then(() =>{
+	console.log("BD connected");
+}).catch( err =>{
+	console.log("Error: " + err.message);
+});
+
+/*
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true});
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
+*/
 
 //Setting bodyParser to get info from forms
 app.use(bodyParser.urlencoded({extended: true}));
