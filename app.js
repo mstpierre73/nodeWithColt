@@ -20,7 +20,7 @@ const PORT = 3000;
 
 //APP SETTINGS ========================================================================================
 
-//connect to the Database and update for some deprecation warning
+//connect to the mongoDB (Atlas) and update for some deprecation warning
 mongoose.connect("mongodb+srv://MariseStp:" + process.env.BD_PASSWORD + "@cluster0-ncteq.mongodb.net/test?retryWrites=true&w=majority", {
 	useNewUrlParser: true,
 	useFindAndModify: false,
@@ -31,7 +31,7 @@ mongoose.connect("mongodb+srv://MariseStp:" + process.env.BD_PASSWORD + "@cluste
 	console.log("Error: " + err.message);
 });
 
-/*
+/* running mongoDB locally
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true});
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);

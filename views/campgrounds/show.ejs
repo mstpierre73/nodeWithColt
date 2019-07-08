@@ -37,7 +37,7 @@
     				<h4 class="card-title"><a href="<%= campgrounds.urlCamping %>"><%=campgrounds.name %></a></h4>
     				<p class="card-text"><%= campgrounds.description %></p>
 					<div class="d-flex justify-content-between">
-						<span><em>Camping recommandé par : <a href="/users/<%=campgrounds.author.id%>"><%= campgrounds.author.username %></a> - <%= campgrounds.author.email %></em></span>
+						<span><em>Camping recommandé par : <a href="/users/<%=campgrounds.author.id%>"><%= campgrounds.author.username %></a></em></span>
 						<span><%= moment(campgrounds.createdAt).fromNow() %></span>
 					</div>
 			
@@ -60,7 +60,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="d-flex justify-content-between">
-							<span><strong><%= comment.author.username %> - <%= comment.author.email %></strong></span>
+							<span><strong><a href="/users/<%=campgrounds.author.id%>"><%= comment.author.username %></a></strong></span>
 							<span><%= moment(comment.createdAt).fromNow() %></span>							
 						</div>
 						<p><%= comment.text %></p>
@@ -108,7 +108,7 @@
     });
   }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqkY1PjvcFdNNnIQVq6l7x3ePjUk38rn4&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.API_KEY2 %>&callback=initMap"></script>
 
 
 <% include ../partials/footer %>

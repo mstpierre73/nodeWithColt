@@ -120,23 +120,22 @@ router.post("/forgot", (req, res, next)=>{
 			let smtpTransport = nodemailer.createTransport({
 				service: 'Gmail',
 				auth: {
-					user: 'dgariepy47@gmail.com',
+					user: process.env.GMAILADD,
 					pass: process.env.GMAILPW
 				}
 			});
 			
 			let mailOptions = {
 				to: user.email,
-				from: 'dgariepy47@gmail.com',
+				from: process.env.GMAILADD,
 				subject: 'Mofidier votre mot de passe sur CampiFav',
-				text: 'Vous recevez ce message car vous (ou une autre personne) avez fait une demande de modification de votre mot de passe sur CampiFav.' + ' \n ' + 
+				text: 'Vous recevez ce message car vous (ou une autre personne) avez fait une demande de modification de votre mot de passe sur CampiFav.' + ' \n\n ' + 
 				'Cliquez sur le lien suivant ou copiez celui-ci dans votre navigateur, pour compléter le processus: ' + ' \n ' +
 				'http://' + req.headers.host + '/reset/' + token + ' \n\n ' +
-				"Si vous n'avez pas fait cette demande, ignorez ce message et votre mot de passe demeurera inchangé. " + ' \n ' +
+				"Si vous n'avez pas fait cette demande, ignorez ce message et votre mot de passe demeurera inchangé. " + ' \n\n ' +
 				"Vous avez une heure pour modifier votre mot de passe avant l'expiration de votre code d'accès."
 			};
 			smtpTransport.sendMail(mailOptions, (err)=>{
-				console.log('mail sent');
 				req.flash("success", "Un courriel a été envoyé a " + user.email + " avec des instructions pour modifier le mot de passe. " + "Vous avez une heure pour modifier celui-ci avant l'expiration du code d'accès.");
 				done(err, 'done');
 			});
@@ -189,14 +188,14 @@ router.post("/reset/:token", (req, res)=>{
 			let smtpTransport = nodemailer.createTransport({
 				service: 'Gmail',
 				auth: {
-					user: 'dgariepy47@gmail.com',
+					user: process.env.GMAILADD,
 					pass: process.env.GMAILPW 
 				}
 			});
 			
 			let mailOptions = {
 				to: user.email,
-				from: 'dgariepy47@gmail.com',
+				from: process.env.GMAILADD,
 				subject: "Votre mot de passe a été changé.",
 				text: "Bonjour, \n\n" + 
 				"Ce message est une confirmation que votre mot de passe pour votre compte " + user.email + " vient d'être changé. \n"
