@@ -97,7 +97,7 @@ app.use(authRoutes);
 //SERVER LISTENING ===================================================================================
 
 //Define port for server to listen
-app.listen(PORT || process.env.PORT, process.env.IP, () => {
+app.listen(process.env.PORT, process.env.IP, () => {
 	console.log("The YelpCamp project server listen on port 3000");
 });
 
