@@ -20,7 +20,7 @@ const PORT = 3000;
 
 //APP SETTINGS ========================================================================================
 
-//connect to the mongoDB (Atlas) and update for some deprecation warning
+//connect to the mongoDB (Atlas or local) and update for some deprecation warning
 
 mongoose.connect(process.env.DB_URL, {
 	useNewUrlParser: true,
@@ -31,16 +31,6 @@ mongoose.connect(process.env.DB_URL, {
 }).catch( err =>{
 	console.log("Error: " + err.message);
 });
-
-
-//running mongoDB locally
-/*
-mongoose.connect(process.env.DB_URL, {
-	useNewUrlParser: true,
-	useFindAndModify: false,
-	useCreateIndex: true
-});*/
-
 
 //Setting bodyParser to get info from forms
 app.use(bodyParser.urlencoded({extended: true}));
